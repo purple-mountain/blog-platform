@@ -1,0 +1,27 @@
+services:
+  postgres:
+    container_name: container-blog-pg
+    image: postgres
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: blog-platform-dev
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+  cache:
+    image: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --loglevel warning --requirepass root
+    volumes:
+      - cache:/data
+    restart: always
+
+volumes:
+  postgres-data:
+  cache:
+    driver: local
