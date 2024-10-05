@@ -1,11 +1,16 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
+import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import prettierConfig from "eslint-config-prettier";
 
-
-export default [
-  {files: ["**/*.{js,mjs,cjs,ts}"]},
-  {languageOptions: { globals: globals.browser }},
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-];
+export default tseslint.config(
+	eslint.configs.recommended,
+	...tseslint.configs.recommended,
+	prettierConfig,
+	{
+		rules: {
+			"@typescript-eslint/no-explicit-any": "off",
+		},
+	},
+	{ files: ["./src/**/*.ts"] },
+	{ ignores: ["./dist/**/*", "./build/**/*", "**/*.js", "./node_modules/**/*"] }
+);
