@@ -1,29 +1,21 @@
 import { DataSource } from "typeorm";
 import "dotenv/config";
+import { dataSourceConfig } from "../config/dataSource.config";
+
+export const AppDataSource = new DataSource(dataSourceConfig);
 
 class DbClient {
-	public readonly connection = new DataSource({
-		type: "postgres",
-		host: process.env["DATABASE_HOST"],
-		port: Number(process.env["DATABASE_PORT"]),
-		username: process.env["DATABASE_USER"],
-		password: process.env["DATABASE_PASSWORD"],
-		database: process.env["DATABASE_NAME"],
-	});
+	public readonly connection: DataSource = AppDataSource;
 
 	public async init() {
 		await this.connection.initialize();
 	}
 
-	public async execute<T, K = unknown>(query: string, params?: K[]): Promise<T[] | T> {
+	public async execute<T, K = unknown>(query: string, params?: K[]): Promise<T[]> {
 		const queryRunner = this.connection.createQueryRunner();
 
 		try {
 			const result = await queryRunner.query(query, params);
-
-			if (result.length === 1) {
-				return result[0];
-			}
 
 			return result;
 		} finally {

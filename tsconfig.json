@@ -1,28 +1,29 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ESNext"],
-    "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "rootDir": "./src",
-    "baseUrl": "./src",
-    "paths": {
-      "#/*": ["*"]
-    },
-    "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./build",
-    "removeComments": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "useUnknownInCatchVariables": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*"]
+	"compilerOptions": {
+		"target": "esnext",
+		"lib": ["ES6"],
+		"module": "commonjs",
+		"moduleResolution": "Node",
+		"rootDir": "./src",
+		"baseUrl": "./src",
+		"paths": {
+			"#/*": ["*"]
+		},
+		"resolveJsonModule": true,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "./build",
+		"removeComments": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"useUnknownInCatchVariables": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
 }
