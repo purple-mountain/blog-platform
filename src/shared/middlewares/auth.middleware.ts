@@ -6,7 +6,7 @@ import { generateJwtToken } from "../utils/generateToken";
 import { sendCookies } from "../utils/sendCookies";
 import { AuthTokenPayload } from "../types/jwtPayload";
 
-export async function protect(req: Request, res: Response, next: NextFunction) {
+export async function auth(req: Request, res: Response, next: NextFunction) {
 	const accessToken = req?.cookies["accessToken"];
 	const refreshToken = req?.cookies["refreshToken"];
 
@@ -33,6 +33,11 @@ export async function protect(req: Request, res: Response, next: NextFunction) {
 	if (!user) {
 		throw new UnauthorizedError("User does not exist");
 	}
+
+	req.user = {
+		id: user.id,
+		role: user.role,
+	};
 
 	next();
 }

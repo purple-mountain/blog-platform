@@ -9,6 +9,7 @@
 		"paths": {
 			"#/*": ["*"]
 		},
+		"typeRoots": ["./src/shared/types", "./node_modules/@types"],
 		"resolveJsonModule": true,
 		"declaration": true,
 		"declarationMap": true,
