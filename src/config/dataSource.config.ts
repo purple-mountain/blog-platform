@@ -8,4 +8,5 @@ export const dataSourceConfig: DataSourceOptions = {
 	password: process.env["DATABASE_PASSWORD"],
 	database: process.env["DATABASE_NAME"],
 	migrations: [`${__dirname}/../database/migrations/**/*{.ts,.js}`],
+	entities: [`${__dirname}/../modules/**/entities/*{.ts,.js}`],
 };

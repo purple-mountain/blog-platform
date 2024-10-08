@@ -3,19 +3,19 @@ import { UsersRepository } from "#/modules/users/users.repository";
 import { UnauthorizedError } from "#/shared/errors/unauthorized-error";
 import bcrypt from "bcrypt";
 import { generateJwtToken } from "#/shared/utils/generateToken";
-import { UserModel } from "#/modules/users/users.model";
 import { BadRequestError } from "#/shared/errors/bad-request-error";
+import { Role, User } from "#/modules/users/entities/user.entity";
 
 jest.mock("#/shared/utils/generateToken");
 jest.mock("bcrypt");
 
-const mockUser: UserModel | null = {
+const mockUser: User | null = {
 	id: "1",
 	email: "davranbek@example.com",
 	username: "davranbek",
 	password: "123123123",
-	role: "user",
-	createdAt: new Date().toISOString(),
+	role: Role.USER,
+	createdAt: new Date(),
 };
 
 describe("AuthService", () => {

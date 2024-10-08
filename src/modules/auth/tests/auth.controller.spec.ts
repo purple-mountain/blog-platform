@@ -2,19 +2,19 @@ import request from "supertest";
 import { AuthController } from "../auth.controller";
 import { AuthService } from "../auth.service";
 import express from "express";
-import { UserModel } from "#/modules/users/users.model";
+import { Role, User } from "#/modules/users/entities/user.entity";
 
 const app = express();
 app.use(express.json());
 app.use("/auth", AuthController);
 
-const mockUser: UserModel = {
+const mockUser: User = {
 	id: "1",
 	email: "davranbek@example.com",
 	username: "davranbek",
 	password: "123123123",
-	role: "user",
-	createdAt: new Date().toISOString(),
+	role: Role.USER,
+	createdAt: new Date(),
 };
 
 describe("AuthController", () => {
@@ -39,7 +39,7 @@ describe("AuthController", () => {
 
 			expect(response.status).toBe(200);
 			expect(response.body).toEqual({
-				data: mockUser,
+				data: { ...mockUser, createdAt: mockUser.createdAt.toISOString() },
 				message: "User logged in successfully",
 			});
 
@@ -75,7 +75,7 @@ describe("AuthController", () => {
 
 			expect(response.status).toBe(201);
 			expect(response.body).toEqual({
-				data: mockUser,
+				data: { ...mockUser, createdAt: mockUser.createdAt.toISOString() },
 				message: "User signed up successfully",
 			});
 
