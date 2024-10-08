@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { db } from "#/database/database";
 import { Request, Response } from "express";
 import { AuthController } from "#/modules/auth/auth.controller";
+import { BlogsController } from "./modules/blogs/blogs.controller";
 import { notFoundMiddleware } from "#/shared/middlewares/not-found.middleware";
 import { errorMiddleware } from "#/shared/middlewares/error.middleware";
 import { auth } from "./shared/middlewares/auth.middleware";
@@ -24,6 +25,7 @@ app.get("/health", async (_req: Request, res: Response) => {
 });
 
 app.use("/auth", AuthController);
+app.use("/blogs", BlogsController);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
