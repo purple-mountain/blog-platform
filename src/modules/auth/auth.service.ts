@@ -1,4 +1,3 @@
-import { UserModel } from "../users/users.model";
 import { LoginRequestBodyDto } from "./dto/request/login-request-body.dto";
 import bcrypt from "bcrypt";
 import { SignUpRequestBodyDto } from "./dto/request/sign-up-request-body.dto";
@@ -6,11 +5,12 @@ import { UsersRepository } from "../users/users.repository";
 import { BadRequestError } from "#/shared/errors/bad-request-error";
 import { UnauthorizedError } from "#/shared/errors/unauthorized-error";
 import { generateJwtToken } from "#/shared/utils/generateToken";
+import { User } from "../users/entities/user.entity";
 
 export class AuthService {
 	static async login(
 		loginData: LoginRequestBodyDto
-	): Promise<{ user: UserModel; accessToken: string; refreshToken: string }> {
+	): Promise<{ user: User; accessToken: string; refreshToken: string }> {
 		const foundUser = await UsersRepository.getOneByEmail({ email: loginData.email });
 
 		if (!foundUser) {
@@ -34,7 +34,7 @@ export class AuthService {
 
 	static async signUp(
 		signUpData: SignUpRequestBodyDto
-	): Promise<{ newUser: UserModel; accessToken: string; refreshToken: string }> {
+	): Promise<{ newUser: User; accessToken: string; refreshToken: string }> {
 		const userExists = await UsersRepository.getOneByEmail({ email: signUpData.email });
 
 		if (userExists) {
