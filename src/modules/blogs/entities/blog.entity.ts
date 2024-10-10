@@ -13,8 +13,8 @@ export class Blog {
 	@PrimaryGeneratedColumn("uuid")
 	id!: string;
 
-	@ManyToOne(() => User)
-	author!: User;
+	@ManyToOne(() => User, { onDelete: "CASCADE" })
+	author!: Pick<User, "id" | "email" | "username">;
 
 	@Column({ type: "varchar", length: 255 })
 	title!: string;
