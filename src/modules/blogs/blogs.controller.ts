@@ -1,5 +1,5 @@
 import { validateRequestBody } from "#/shared/validators/request-body.validator";
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { BlogsService } from "./blogs.service";
 import "express-async-errors";
 import { createBlogRequestBodyDtoSchema } from "./dto/request/create-blog-request-body.dto";
@@ -21,7 +21,7 @@ export const BlogsController = Router();
 BlogsController.get(
 	"/",
 	validateSearchParams(blogsSearchParamsDtoSchema),
-	async (req, res) => {
+	async (req: Request, res: Response) => {
 		const searchParams = req.query as unknown as BlogsSearchParamsDto;
 		const blogs = await BlogsService.getBlogs(searchParams);
 
@@ -39,7 +39,7 @@ BlogsController.post(
 	"/",
 	auth,
 	validateRequestBody(createBlogRequestBodyDtoSchema),
-	async (req, res) => {
+	async (req: Request, res: Response) => {
 		const newBlog = await BlogsService.createBlog(req.body, req.user.id);
 
 		return res.status(201).json({ data: newBlog, message: "Blog created successfully" });
@@ -52,7 +52,7 @@ BlogsController.put(
 	validatePathParameter("id", uuidSchema),
 	validateRequestBody(updateBlogRequestBodyDtoSchema),
 	checkResourceOwnership(Blog, AppDataSource, false),
-	async (req, res) => {
+	async (req: Request, res: Response) => {
 		const updatedBlog = await BlogsService.updateBlog(req.body, req.params["id"] || "");
 
 		return res
@@ -66,7 +66,7 @@ BlogsController.delete(
 	auth,
 	validatePathParameter("id", uuidSchema),
 	checkResourceOwnership(Blog, AppDataSource, true),
-	async (req, res) => {
+	async (req: Request, res: Response) => {
 		await BlogsService.deleteBlog(req.params["id"] || "");
 
 		return res.status(204).send();
