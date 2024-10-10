@@ -13,7 +13,7 @@ export class BlogsService {
 	}
 
 	static async getBlog(id: string): Promise<Blog> {
-		const blog = await BlogsRepository.getOne(id);
+		const blog = await BlogsRepository.getOne({ id: id });
 
 		if (!blog) {
 			throw new NotFoundError("Blog not found");
@@ -42,7 +42,7 @@ export class BlogsService {
 	}
 
 	static async deleteBlog(id: string): Promise<void> {
-		const { affected: deleteCount } = await BlogsRepository.deleteOne(id);
+		const { affected: deleteCount } = await BlogsRepository.deleteOne({ id: id });
 
 		if (!deleteCount) {
 			throw new NotFoundError("Blog not found");
