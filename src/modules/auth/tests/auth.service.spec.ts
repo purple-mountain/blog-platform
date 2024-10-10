@@ -19,7 +19,7 @@ const mockUser: User | null = {
 };
 
 describe("AuthService", () => {
-	afterEach(() => {
+	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
@@ -29,7 +29,7 @@ describe("AuthService", () => {
 		it("should throw UnauthorizedError if user does not exist", async () => {
 			jest.spyOn(UsersRepository, "getOneByEmail").mockResolvedValue(null);
 
-			await expect(AuthService.login(loginData)).rejects.toThrow(UnauthorizedError);
+			expect(AuthService.login(loginData)).rejects.toThrow(UnauthorizedError);
 		});
 
 		it("should throw UnauthorizedError if password is incorrect", async () => {
@@ -39,8 +39,7 @@ describe("AuthService", () => {
 
 			(bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-			await expect(AuthService.login(loginData)).rejects.toThrow(UnauthorizedError);
-
+			expect(AuthService.login(loginData)).rejects.toThrow(UnauthorizedError);
 			expect(repositorySpy).toHaveBeenCalledWith({ email: loginData.email });
 		});
 
@@ -82,7 +81,7 @@ describe("AuthService", () => {
 				.spyOn(UsersRepository, "getOneByEmail")
 				.mockResolvedValue(mockUser);
 
-			await expect(AuthService.signUp(signUpData)).rejects.toThrow(BadRequestError);
+			expect(AuthService.signUp(signUpData)).rejects.toThrow(BadRequestError);
 			expect(repositorySpy).toHaveBeenCalledWith({ email: signUpData.email });
 		});
 

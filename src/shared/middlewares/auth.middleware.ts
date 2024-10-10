@@ -16,14 +16,12 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
 
 	let accessTokenPayload: AuthTokenPayload | null;
 
-	// when the access token is not found in cookie but refresh is found
 	if (!accessToken) {
 		accessTokenPayload = handleTokenRefresh(res, refreshToken);
 	} else {
 		accessTokenPayload = verifyToken(accessToken);
 	}
 
-	// when the access token has expired
 	if (accessTokenPayload === null) {
 		accessTokenPayload = handleTokenRefresh(res, refreshToken);
 	}
