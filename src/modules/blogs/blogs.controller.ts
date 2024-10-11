@@ -9,7 +9,6 @@ import { uuidSchema } from "#/shared/schemas/uuid-schema";
 import { auth } from "#/shared/middlewares/auth.middleware";
 import { checkResourceOwnership } from "#/shared/middlewares/checkResourceOwnership.middleware";
 import { Blog } from "./entities/blog.entity";
-import { AppDataSource } from "#/database/database";
 import { validateSearchParams } from "#/shared/validators/search-params.validator";
 import {
 	BlogsSearchParamsDto,
@@ -51,7 +50,7 @@ BlogsController.put(
 	auth,
 	validatePathParameter("id", uuidSchema),
 	validateRequestBody(updateBlogRequestBodyDtoSchema),
-	checkResourceOwnership(Blog, AppDataSource, false),
+	checkResourceOwnership(Blog, { allowAdmin: false }),
 	async (req: Request, res: Response) => {
 		const updatedBlog = await BlogsService.updateBlog(req.body, req.params["id"] || "");
 
@@ -65,7 +64,7 @@ BlogsController.delete(
 	"/:id",
 	auth,
 	validatePathParameter("id", uuidSchema),
-	checkResourceOwnership(Blog, AppDataSource, true),
+	checkResourceOwnership(Blog, { allowAdmin: true }),
 	async (req: Request, res: Response) => {
 		await BlogsService.deleteBlog(req.params["id"] || "");
 

@@ -1,24 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import { UnauthorizedError } from "../errors/unauthorized-error";
-import { DataSource, EntityTarget, FindOptionsWhere } from "typeorm";
+import { EntityTarget, FindOptionsWhere } from "typeorm";
+import { AppDataSource } from "#/database/database";
 
-interface ResourceEntity {
-	id: string;
-	author: { id: string };
-}
+type ResourceEntity =
+	| { id: string; author: { id: string }; user?: never }
+	| { id: string; user: { id: string }; author?: never };
 
 export function checkResourceOwnership<T extends ResourceEntity>(
 	entity: EntityTarget<T>,
-	dataSource: DataSource,
-	allowAdmin: boolean
+	options?: { allowAdmin: boolean }
 ) {
-	return (req: Request, res: Response, next: NextFunction) => {
+	return (req: Request, _res: Response, next: NextFunction) => {
 		const resourceId = req.params["id"] || "";
-		const repository = dataSource.getRepository(entity);
+		const repository = AppDataSource.getRepository(entity);
 		const whereQuery = { id: resourceId } as FindOptionsWhere<T>;
 
-		// express does not allow async middlewares
-		// so i am using promise chaining
 		repository
 			.findOne({
 				where: whereQuery,
@@ -28,9 +25,12 @@ export function checkResourceOwnership<T extends ResourceEntity>(
 				if (!resource) {
 					throw new UnauthorizedError("Resource not found");
 				}
+
+				const resourceAuthorId = resource.author?.id || resource.user?.id;
+
 				if (
-					resource.author.id === req.user.id ||
-					(allowAdmin && req.user.role === "admin")
+					resourceAuthorId === req.user.id ||
+					(options?.allowAdmin && req.user.role === "admin")
 				) {
 					next();
 				} else {
