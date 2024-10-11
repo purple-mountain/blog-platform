@@ -8,7 +8,7 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 
-@Entity({ name: "blogs" })
+@Entity({ name: "blog" })
 export class Blog {
 	@PrimaryGeneratedColumn("uuid")
 	id!: string;
