@@ -5,6 +5,7 @@ import { verifyToken } from "../utils/verifyToken";
 import { generateJwtToken } from "../utils/generateToken";
 import { sendCookies } from "../utils/sendCookies";
 import { AuthTokenPayload } from "../types/jwtPayload";
+import { envConfig } from "#/config/env.config";
 
 export async function auth(req: Request, res: Response, next: NextFunction) {
 	const accessToken = req?.cookies["accessToken"];
@@ -47,7 +48,7 @@ function handleTokenRefresh(res: Response, refreshToken: string) {
 		throw new UnauthorizedError("Refresh token has expired");
 	}
 
-	const newAccessToken = generateJwtToken("15m", {
+	const newAccessToken = generateJwtToken(envConfig.JWT_ACCESS_TOKEN_EXPIRATION_TIME, {
 		userId: refreshTokenPayload["userId"],
 	});
 

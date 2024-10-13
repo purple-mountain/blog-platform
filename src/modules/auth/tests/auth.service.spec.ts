@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { generateJwtToken } from "#/shared/utils/generateToken";
 import { BadRequestError } from "#/shared/errors/bad-request-error";
 import { Role, User } from "#/modules/users/entities/user.entity";
+import { envConfig } from "#/config/env.config";
 
 jest.mock("#/shared/utils/generateToken");
 jest.mock("bcrypt");
@@ -64,8 +65,14 @@ describe("AuthService", () => {
 			});
 
 			expect(generateJwtToken).toHaveBeenCalledTimes(2);
-			expect(generateJwtToken).toHaveBeenCalledWith("15m", { userId: mockUser.id });
-			expect(generateJwtToken).toHaveBeenCalledWith("7d", { userId: mockUser.id });
+			expect(generateJwtToken).toHaveBeenCalledWith(
+				envConfig.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+				{ userId: mockUser.id }
+			);
+			expect(generateJwtToken).toHaveBeenCalledWith(
+				envConfig.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+				{ userId: mockUser.id }
+			);
 		});
 	});
 
@@ -111,8 +118,14 @@ describe("AuthService", () => {
 			expect(createUserRepositorySpy).toHaveBeenCalledWith(signUpData);
 
 			expect(generateJwtToken).toHaveBeenCalledTimes(2);
-			expect(generateJwtToken).toHaveBeenCalledWith("15m", { userId: mockUser.id });
-			expect(generateJwtToken).toHaveBeenCalledWith("7d", { userId: mockUser.id });
+			expect(generateJwtToken).toHaveBeenCalledWith(
+				envConfig.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+				{ userId: mockUser.id }
+			);
+			expect(generateJwtToken).toHaveBeenCalledWith(
+				envConfig.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+				{ userId: mockUser.id }
+			);
 
 			expect(bcrypt.genSalt).toHaveBeenCalledWith(10);
 			expect(bcrypt.hash).toHaveBeenCalledWith(signUpData.password, "Salt");
