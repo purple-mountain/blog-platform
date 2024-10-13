@@ -3,6 +3,8 @@ import { BlogsRepository } from "../blogs.repository";
 import { BlogsService } from "../blogs.service";
 import { Blog } from "../entities/blog.entity";
 import { NotFoundError } from "#/shared/errors/not-found-error";
+import { CommentsRepository } from "#/modules/comments/comments.repository";
+import { Comment } from "#/modules/comments/entities/comment.entity";
 
 const mockBlogs: Blog[] = [
 	{
@@ -26,6 +28,27 @@ const mockBlogs: Blog[] = [
 ];
 
 const mockBlog: Blog = mockBlogs[0] as Blog;
+
+const mockComments: Comment[] = [
+	{
+		id: "1",
+		content: "Comment 1",
+		blog: { id: "1" },
+		user: { id: "1", username: "davranbek", email: "davranbek@gmail.com" },
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	},
+	{
+		id: "2",
+		content: "Comment 2",
+		blog: { id: "1" },
+		user: { id: "1", username: "davranbek", email: "davranbek@gmail.com" },
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	},
+];
+
+const mockComment = mockComments[0] as Comment;
 
 describe("BlogsService", () => {
 	beforeEach(() => {
@@ -145,6 +168,86 @@ describe("BlogsService", () => {
 			expect(BlogsService.deleteBlog(notExistingBlogId)).rejects.toThrow(NotFoundError);
 			expect(repositorySpy).toHaveBeenCalledTimes(1);
 			expect(repositorySpy).toHaveBeenLastCalledWith({ id: notExistingBlogId });
+		});
+	});
+
+	describe("getBlogComments", () => {
+		it("should return comments if it is successfull ", async () => {
+			const repositorySpy = jest
+				.spyOn(CommentsRepository, "getAllByBlogId")
+				.mockResolvedValue(mockComments);
+			const queryParams = { limit: 10, page: 1 };
+
+			const result = await BlogsService.getBlogComments(queryParams, mockBlog.id);
+
+			expect(result).toEqual(mockComments);
+			expect(repositorySpy).toHaveBeenCalledTimes(1);
+			expect(repositorySpy).toHaveBeenLastCalledWith(queryParams, mockBlog.id);
+		});
+
+		it("should throw NotFoundError if blog is not found ", async () => {
+			const repositorySpy = jest
+				.spyOn(CommentsRepository, "getAllByBlogId")
+				.mockResolvedValue(null);
+			const queryParams = { limit: 10, page: 1 };
+			const notExistingBlogId = randomUUID();
+
+			expect(
+				BlogsService.getBlogComments(queryParams, notExistingBlogId)
+			).rejects.toThrow(NotFoundError);
+
+			expect(repositorySpy).toHaveBeenCalledTimes(1);
+			expect(repositorySpy).toHaveBeenLastCalledWith(queryParams, notExistingBlogId);
+		});
+	});
+
+	describe("createBlogComment", () => {
+		const newCommentData = {
+			content: "Comment 1",
+		};
+
+		it("should return new comment if it is successfull ", async () => {
+			const blogRepositorySpy = jest
+				.spyOn(BlogsRepository, "getOne")
+				.mockResolvedValue(mockBlog);
+			const commentRepositorySpy = jest
+				.spyOn(CommentsRepository, "createOne")
+				.mockResolvedValue(mockComment);
+
+			const result = await BlogsService.createBlogComment(
+				newCommentData,
+				mockBlog.author.id,
+				mockBlog.id
+			);
+
+			expect(result).toEqual(mockComment);
+
+			expect(blogRepositorySpy).toHaveBeenCalledTimes(1);
+			expect(blogRepositorySpy).toHaveBeenLastCalledWith({ id: mockBlog.id });
+
+			expect(commentRepositorySpy).toHaveBeenCalledTimes(1);
+			expect(commentRepositorySpy).toHaveBeenLastCalledWith(
+				newCommentData,
+				mockBlog.author.id,
+				mockBlog.id
+			);
+		});
+
+		it("should throw NotFoundError if blog is not found ", async () => {
+			const blogRepositorySpy = jest
+				.spyOn(BlogsRepository, "getOne")
+				.mockResolvedValue(null);
+			const commentRepositorySpy = jest
+				.spyOn(CommentsRepository, "createOne")
+				.mockResolvedValue(mockComment);
+
+			expect(
+				BlogsService.createBlogComment(newCommentData, mockBlog.author.id, mockBlog.id)
+			).rejects.toThrow(NotFoundError);
+
+			expect(blogRepositorySpy).toHaveBeenCalledTimes(1);
+			expect(blogRepositorySpy).toHaveBeenLastCalledWith({ id: mockBlog.id });
+			expect(commentRepositorySpy).toHaveBeenCalledTimes(0);
 		});
 	});
 });
