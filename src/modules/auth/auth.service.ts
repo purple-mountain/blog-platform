@@ -6,6 +6,7 @@ import { BadRequestError } from "#/shared/errors/bad-request-error";
 import { UnauthorizedError } from "#/shared/errors/unauthorized-error";
 import { generateJwtToken } from "#/shared/utils/generateToken";
 import { User } from "../users/entities/user.entity";
+import { envConfig } from "#/config/env.config";
 
 export class AuthService {
 	static async login(
@@ -26,8 +27,12 @@ export class AuthService {
 			throw new UnauthorizedError("Password is incorrect");
 		}
 
-		const accessToken = generateJwtToken("15m", { userId: foundUser.id });
-		const refreshToken = generateJwtToken("7d", { userId: foundUser.id });
+		const accessToken = generateJwtToken(envConfig.JWT_ACCESS_TOKEN_EXPIRATION_TIME, {
+			userId: foundUser.id,
+		});
+		const refreshToken = generateJwtToken(envConfig.JWT_REFRESH_TOKEN_EXPIRATION_TIME, {
+			userId: foundUser.id,
+		});
 
 		return { user: foundUser, accessToken, refreshToken };
 	}
@@ -50,8 +55,12 @@ export class AuthService {
 			password: hashedPassword,
 		});
 
-		const accessToken = generateJwtToken("15m", { userId: newUser.id });
-		const refreshToken = generateJwtToken("7d", { userId: newUser.id });
+		const accessToken = generateJwtToken(envConfig.JWT_ACCESS_TOKEN_EXPIRATION_TIME, {
+			userId: newUser.id,
+		});
+		const refreshToken = generateJwtToken(envConfig.JWT_REFRESH_TOKEN_EXPIRATION_TIME, {
+			userId: newUser.id,
+		});
 
 		return { newUser, accessToken, refreshToken };
 	}
