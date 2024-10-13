@@ -8,6 +8,7 @@ import { BlogsController } from "./modules/blogs/blogs.controller";
 import { notFoundMiddleware } from "#/shared/middlewares/not-found.middleware";
 import { errorMiddleware } from "#/shared/middlewares/error.middleware";
 import { auth } from "./shared/middlewares/auth.middleware";
+import { CommentsController } from "./modules/comments/comments.controller";
 
 export const app = express();
 
@@ -27,6 +28,7 @@ app.get("/health", async (_req: Request, res: Response) => {
 
 app.use("/auth", AuthController);
 app.use("/blogs", BlogsController);
+app.use("/comments", CommentsController);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
