@@ -15,6 +15,6 @@ export const signUpRequestBodyDtoSchema = z
 			.string({ message: "Password is required" })
 			.min(8, { message: "Password must be more than 8 characters long" }),
 	})
-	.strict({ message: "Invalid body" });
+	.strict({ message: "Unknown fields found in request body" });
 
 export type SignUpRequestBodyDto = z.infer<typeof signUpRequestBodyDtoSchema>;
