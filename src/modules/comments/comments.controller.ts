@@ -8,11 +8,52 @@ import { uuidSchema } from "#/shared/schemas/uuid-schema";
 import { auth } from "#/shared/middlewares/auth.middleware";
 import { validateRequestBody } from "#/shared/validators/request-body.validator";
 import { updateCommentRequestBodyDtoSchema } from "./dto/request/update-comment-request-body.dto";
+import { validateSearchParams } from "#/shared/validators/search-params.validator";
+import {
+	CommentsSearchParamsDto,
+	commentsSearchParamsDtoSchema,
+} from "./dto/request/comment-search-params.dto";
+import { createCommentRequestBodyDtoSchema } from "./dto/request/create-comment-request-body.dto";
 
 export const CommentsController = Router();
 
+CommentsController.get(
+	"/blogs/:id/comments",
+	validatePathParameter("id", uuidSchema),
+	validateSearchParams(commentsSearchParamsDtoSchema),
+	async (req, res) => {
+		const searchParams = req.query as unknown as CommentsSearchParamsDto;
+		const blog = await CommentsService.getBlogComments(
+			searchParams,
+			req.params["id"] || ""
+		);
+
+		return res
+			.status(200)
+			.json({ data: blog, message: "Blog comments retrieved successfully" });
+	}
+);
+
+CommentsController.post(
+	"/blogs/:id/comments",
+	auth,
+	validatePathParameter("id", uuidSchema),
+	validateRequestBody(createCommentRequestBodyDtoSchema),
+	async (req, res) => {
+		const newComment = await CommentsService.createBlogComment(
+			req.body,
+			req.user.id,
+			req.params["id"] || ""
+		);
+
+		return res
+			.status(200)
+			.json({ data: newComment, message: "Blog comment created successfully" });
+	}
+);
+
 CommentsController.put(
-	"/:id",
+	"/comments/:id",
 	auth,
 	validatePathParameter("id", uuidSchema),
 	validateRequestBody(updateCommentRequestBodyDtoSchema),
@@ -30,7 +71,7 @@ CommentsController.put(
 );
 
 CommentsController.delete(
-	"/:id",
+	"/comments/:id",
 	auth,
 	validatePathParameter("id", uuidSchema),
 	checkResourceOwnership(Comment, { allowAdmin: true }),

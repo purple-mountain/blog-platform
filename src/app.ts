@@ -28,7 +28,7 @@ app.get("/health", async (_req: Request, res: Response) => {
 
 app.use("/auth", AuthController);
 app.use("/blogs", BlogsController);
-app.use("/comments", CommentsController);
+app.use("/", CommentsController);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
