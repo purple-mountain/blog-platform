@@ -7,7 +7,7 @@ import { CommentsController } from "../comments.controller";
 const app = express();
 
 app.use(express.json());
-app.use("/comments", CommentsController);
+app.use("/", CommentsController);
 
 jest.mock("../comments.service");
 
@@ -61,7 +61,45 @@ describe("CommentsController", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("PUT /:id", () => {
+	describe("GET /blogs/:id/comments", () => {
+		it("should get all blog comments", async () => {
+			(CommentsService.getBlogComments as jest.Mock).mockResolvedValue(mockComments);
+
+			const response = await request(app).get("/blogs/" + 1 + "/comments");
+
+			expect(response.status).toBe(200);
+			expect(response.body).toEqual({
+				data: mockComments.map((mockComment) => ({
+					...mockComment,
+					createdAt: mockComment.createdAt.toISOString(),
+					updatedAt: mockComment.updatedAt.toISOString(),
+				})),
+				message: "Blog comments retrieved successfully",
+			});
+		});
+	});
+
+	describe("POST /blogs/:id/comments", () => {
+		it("should create a blog comment", async () => {
+			(CommentsService.createBlogComment as jest.Mock).mockResolvedValue(mockComment);
+
+			const response = await request(app)
+				.post("/blogs/" + 1 + "/comments")
+				.send({ content: "Comment 1" });
+
+			expect(response.status).toBe(200);
+			expect(response.body).toEqual({
+				data: {
+					...mockComment,
+					createdAt: mockComment.createdAt.toISOString(),
+					updatedAt: mockComment.updatedAt.toISOString(),
+				},
+				message: "Blog comment created successfully",
+			});
+		});
+	});
+
+	describe("PUT /comments/:id", () => {
 		it("should update a comment", async () => {
 			(CommentsService.updateComment as jest.Mock).mockResolvedValue(mockComment);
 
@@ -78,7 +116,7 @@ describe("CommentsController", () => {
 		});
 	});
 
-	describe("DELETE /:id", () => {
+	describe("DELETE /comments/:id", () => {
 		it("should delete a comment", async () => {
 			(CommentsService.deleteComment as jest.Mock).mockResolvedValue(undefined);
 

@@ -1,7 +1,4 @@
 import { NotFoundError } from "#/shared/errors/not-found-error";
-import { CommentsRepository } from "../comments/comments.repository";
-import { CreateCommentRequestBodyDto } from "../comments/dto/request/create-comment-request-body.dto";
-import { Comment } from "../comments/entities/comment.entity";
 import { BlogsRepository } from "./blogs.repository";
 import { BlogsSearchParamsDto } from "./dto/request/blog-search-params.dto";
 import { CreateBlogRequestBodyDto } from "./dto/request/create-blog-request-body.dto";
@@ -50,31 +47,5 @@ export class BlogsService {
 		if (!deleteCount) {
 			throw new NotFoundError("Blog not found");
 		}
-	}
-
-	static async getBlogComments(searchParams: BlogsSearchParamsDto, blogId: string) {
-		const comments = await CommentsRepository.getAllByBlogId(searchParams, blogId);
-
-		if (!comments) {
-			throw new NotFoundError("Blog not found");
-		}
-
-		return comments;
-	}
-
-	static async createBlogComment(
-		data: CreateCommentRequestBodyDto,
-		authorId: string,
-		blogId: string
-	): Promise<Comment> {
-		const blogExists = await BlogsRepository.getOne({ id: blogId });
-
-		if (!blogExists) {
-			throw new NotFoundError("Blog not found");
-		}
-
-		const newBlogComment = await CommentsRepository.createOne(data, authorId, blogId);
-
-		return newBlogComment;
 	}
 }

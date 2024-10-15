@@ -14,7 +14,6 @@ import {
 	BlogsSearchParamsDto,
 	blogsSearchParamsDtoSchema,
 } from "./dto/request/blog-search-params.dto";
-import { createCommentRequestBodyDtoSchema } from "../comments/dto/request/create-comment-request-body.dto";
 
 export const BlogsController = Router();
 
@@ -70,37 +69,5 @@ BlogsController.delete(
 		await BlogsService.deleteBlog(req.params["id"] || "");
 
 		return res.status(204).send();
-	}
-);
-
-BlogsController.get(
-	"/:id/comments",
-	validatePathParameter("id", uuidSchema),
-	validateSearchParams(blogsSearchParamsDtoSchema),
-	async (req, res) => {
-		const searchParams = req.query as unknown as BlogsSearchParamsDto;
-		const blog = await BlogsService.getBlogComments(searchParams, req.params["id"] || "");
-
-		return res
-			.status(200)
-			.json({ data: blog, message: "Blog comments retrieved successfully" });
-	}
-);
-
-BlogsController.post(
-	"/:id/comments",
-	auth,
-	validatePathParameter("id", uuidSchema),
-	validateRequestBody(createCommentRequestBodyDtoSchema),
-	async (req, res) => {
-		const newComment = await BlogsService.createBlogComment(
-			req.body,
-			req.user.id,
-			req.params["id"] || ""
-		);
-
-		return res
-			.status(200)
-			.json({ data: newComment, message: "Blog comment created successfully" });
 	}
 );
