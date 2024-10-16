@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { UnauthorizedError } from "../errors/unauthorized-error";
+import { UnauthorizedError } from "../errors/unauthorized.error";
 import { EntityTarget, FindOptionsWhere } from "typeorm";
 import { AppDataSource } from "#/database/database";
 

@@ -1,4 +1,4 @@
-import { NotFoundError } from "#/shared/errors/not-found-error";
+import { NotFoundError } from "#/shared/errors/not-found.error";
 import { BlogsRepository } from "./blogs.repository";
 import { BlogsSearchParamsDto } from "./dto/request/blog-search-params.dto";
 import { CreateBlogRequestBodyDto } from "./dto/request/create-blog-request-body.dto";

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "#/shared/errors/custom-error";
+import { CustomError } from "#/shared/errors/custom.error";
 
 /* eslint-disable */
 export function errorMiddleware(

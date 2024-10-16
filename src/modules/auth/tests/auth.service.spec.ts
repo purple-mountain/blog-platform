@@ -1,9 +1,9 @@
 import { AuthService } from "../auth.service";
 import { UsersRepository } from "#/modules/users/users.repository";
-import { UnauthorizedError } from "#/shared/errors/unauthorized-error";
+import { UnauthorizedError } from "#/shared/errors/unauthorized.error";
 import bcrypt from "bcrypt";
 import { generateJwtToken } from "#/shared/utils/generateToken";
-import { BadRequestError } from "#/shared/errors/bad-request-error";
+import { BadRequestError } from "#/shared/errors/bad-request.error";
 import { Role, User } from "#/modules/users/entities/user.entity";
 import { envConfig } from "#/config/env.config";
 

@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import { BlogsRepository } from "../blogs.repository";
 import { BlogsService } from "../blogs.service";
 import { Blog } from "../entities/blog.entity";
-import { NotFoundError } from "#/shared/errors/not-found-error";
+import { NotFoundError } from "#/shared/errors/not-found.error";
 
 const mockBlogs: Blog[] = [
 	{

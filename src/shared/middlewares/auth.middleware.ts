@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { UnauthorizedError } from "../errors/unauthorized-error";
+import { UnauthorizedError } from "../errors/unauthorized.error";
 import { UsersRepository } from "#/modules/users/users.repository";
 import { verifyToken } from "../utils/verifyToken";
 import { generateJwtToken } from "../utils/generateToken";
 import { sendCookies } from "../utils/sendCookies";
-import { AuthTokenPayload } from "../types/jwtPayload";
+import { AuthTokenPayload } from "../types/jwt-payload.types";
 import { envConfig } from "#/config/env.config";
 
 export async function auth(req: Request, res: Response, next: NextFunction) {

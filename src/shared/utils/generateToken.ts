@@ -1,6 +1,6 @@
 import { jwtSecret } from "#/config/jwt-secret.config";
 import jwt from "jsonwebtoken";
-import { AuthTokenPayload } from "../types/jwtPayload";
+import { AuthTokenPayload } from "../types/jwt-payload.types";
 
 export function generateJwtToken(
 	expirationTime: string,
