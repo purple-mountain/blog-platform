@@ -12,10 +12,10 @@ app.use("/", CommentsController);
 jest.mock("../comments.service");
 
 jest.mock("#/shared/middlewares/auth.middleware", () => ({
-	auth: jest.fn((req: Request, _res: Response, next: NextFunction) => {
+	auth: (req: Request, _res: Response, next: NextFunction) => {
 		req.user = { id: "1", role: "user" };
 		next();
-	}),
+	},
 }));
 
 jest.mock("#/shared/validators/path-parameter.validator", () => ({
