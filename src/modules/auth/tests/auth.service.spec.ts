@@ -4,7 +4,8 @@ import { UnauthorizedError } from "#/shared/errors/unauthorized.error";
 import bcrypt from "bcrypt";
 import { generateJwtToken } from "#/shared/utils/generateToken";
 import { BadRequestError } from "#/shared/errors/bad-request.error";
-import { Role, User } from "#/modules/users/entities/user.entity";
+import { User } from "#/modules/users/entities/user.entity";
+import { UserRole } from "#/shared/constants/user-role.constant";
 import { envConfig } from "#/config/env.config";
 
 jest.mock("#/shared/utils/generateToken");
@@ -15,7 +16,7 @@ const mockUser: User | null = {
 	email: "davranbek@example.com",
 	username: "davranbek",
 	password: "123123123",
-	role: Role.USER,
+	role: UserRole.USER,
 	createdAt: new Date(),
 };
 

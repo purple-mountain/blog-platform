@@ -2,7 +2,8 @@ import request from "supertest";
 import { AuthController } from "../auth.controller";
 import { AuthService } from "../auth.service";
 import express from "express";
-import { Role, User } from "#/modules/users/entities/user.entity";
+import { User } from "#/modules/users/entities/user.entity";
+import { UserRole } from "#/shared/constants/user-role.constant";
 
 const app = express();
 app.use(express.json());
@@ -13,7 +14,7 @@ const mockUser: User = {
 	email: "davranbek@example.com",
 	username: "davranbek",
 	password: "123123123",
-	role: Role.USER,
+	role: UserRole.USER,
 	createdAt: new Date(),
 };
 

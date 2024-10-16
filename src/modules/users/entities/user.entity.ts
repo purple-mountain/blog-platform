@@ -1,9 +1,5 @@
+import { UserRole } from "#/shared/constants/user-role.constant";
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
-
-export enum Role {
-	ADMIN = "admin",
-	USER = "user",
-}
 
 @Entity({ name: "user" })
 export class User {
@@ -19,8 +15,8 @@ export class User {
 	@Column({ type: "char", length: 60 })
 	password!: string;
 
-	@Column({ type: "enum", enum: Role, default: Role.USER })
-	role!: Role;
+	@Column({ type: "enum", enum: UserRole, default: UserRole.USER })
+	role!: UserRole;
 
 	@CreateDateColumn({
 		type: "timestamptz",
