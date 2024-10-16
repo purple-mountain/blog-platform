@@ -5,9 +5,9 @@ import "express-async-errors";
 import { createBlogRequestBodyDtoSchema } from "./dto/request/create-blog-request-body.dto";
 import { updateBlogRequestBodyDtoSchema } from "./dto/request/update-blog-request-body.dto";
 import { validatePathParameter } from "#/shared/validators/path-parameter.validator";
-import { uuidSchema } from "#/shared/schemas/uuid-schema";
+import { uuidSchema } from "#/shared/schemas/uuid.schema";
 import { auth } from "#/shared/middlewares/auth.middleware";
-import { checkResourceOwnership } from "#/shared/middlewares/checkResourceOwnership.middleware";
+import { checkResourceOwnership } from "#/shared/middlewares/check-resource-ownership.middleware";
 import { Blog } from "./entities/blog.entity";
 import { validateSearchParams } from "#/shared/validators/search-params.validator";
 import {

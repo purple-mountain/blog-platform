@@ -1,4 +1,4 @@
-import { NotFoundError } from "#/shared/errors/not-found-error";
+import { NotFoundError } from "#/shared/errors/not-found.error";
 import { randomUUID } from "crypto";
 import { CommentsRepository } from "../comments.repository";
 import { CommentsService } from "../comments.service";

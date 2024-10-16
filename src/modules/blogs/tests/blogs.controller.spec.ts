@@ -31,7 +31,7 @@ jest.mock("#/shared/validators/request-body.validator", () => ({
 	},
 }));
 
-jest.mock("#/shared/middlewares/checkResourceOwnership.middleware", () => ({
+jest.mock("#/shared/middlewares/check-resource-ownership.middleware", () => ({
 	checkResourceOwnership: () => (_req: Request, _res: Response, next: NextFunction) =>
 		next(),
 }));

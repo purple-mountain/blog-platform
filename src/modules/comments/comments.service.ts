@@ -1,6 +1,6 @@
 import { UpdateCommentRequestBodyDto } from "./dto/request/update-comment-request-body.dto";
 import { CommentsRepository } from "./comments.repository";
-import { NotFoundError } from "#/shared/errors/not-found-error";
+import { NotFoundError } from "#/shared/errors/not-found.error";
 import { Comment } from "./entities/comment.entity";
 import { CommentsSearchParamsDto } from "./dto/request/comment-search-params.dto";
 import { CreateCommentRequestBodyDto } from "./dto/request/create-comment-request-body.dto";
