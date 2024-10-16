@@ -19,4 +19,16 @@ export class UsersRepository {
 
 		return await this.repository.save(newUser);
 	}
+
+	static async updateOne(data: Partial<User>, userId: string): Promise<User | null> {
+		const user = await this.repository.findOne({ where: { id: userId } });
+
+		if (!user) {
+			return null;
+		}
+
+		const updatedUser = await this.repository.save({ ...user, ...data });
+
+		return updatedUser;
+	}
 }
