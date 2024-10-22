@@ -1,3 +1,5 @@
+import { BadRequestError } from "#/shared/errors/bad-request.error";
+import { NotFoundError } from "#/shared/errors/not-found.error";
 import { BlogsRepository } from "../blogs/blogs.repository";
 import { BlogLikesRepository } from "./blog-likes.repository";
 import { BlogLike } from "./entities/blog-like.entity";
@@ -7,7 +9,7 @@ export class BlogLikesService {
 		const blogExists = await BlogsRepository.getOne({ id: blogId });
 
 		if (!blogExists) {
-			throw new Error("Blog not found");
+			throw new NotFoundError("Blog not found");
 		}
 
 		return await BlogLikesRepository.count(blogId);
@@ -17,7 +19,7 @@ export class BlogLikesService {
 		const blogIsAlreadyLiked = await BlogLikesRepository.getOne(blogId, userId);
 
 		if (blogIsAlreadyLiked) {
-			throw new Error("User has already liked this blog");
+			throw new BadRequestError("User has already liked this blog");
 		}
 
 		return await BlogLikesRepository.create(blogId, userId);
@@ -27,7 +29,7 @@ export class BlogLikesService {
 		const { affected } = await BlogLikesRepository.delete(blogId, userId);
 
 		if (affected === 0) {
-			throw new Error("User has not liked this blog");
+			throw new BadRequestError("User has not liked this blog");
 		}
 	}
 }
