@@ -22,7 +22,7 @@ export class Blog {
 	@Column({ type: "text" })
 	content!: string;
 
-	@Column({ type: "simple-array" })
+	@Column({ array: true, type: "varchar", default: "{}" })
 	tags!: string[];
 
 	@CreateDateColumn({
