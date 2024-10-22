@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import "dotenv/config";
-import { dataSourceConfig } from "../config/dataSource.config";
+import { dataSourceConfig } from "../config/data-source.config";
 
 export const AppDataSource = new DataSource(dataSourceConfig);
 
