@@ -6,10 +6,11 @@ import { BlogsFactory } from "./factories/blogs.factory";
 import { CommentsFactory } from "./factories/comments.factory";
 import { MainSeeder } from "./seeders/main.seeder";
 import { dataSourceConfig } from "#/config/data-source.config";
+import { BlogLikesFactory } from "./factories/blog-likes.factory";
 
 const options: DataSourceOptions & SeederOptions = {
 	...dataSourceConfig,
-	factories: [UsersFactory, BlogsFactory, CommentsFactory],
+	factories: [UsersFactory, BlogsFactory, CommentsFactory, BlogLikesFactory],
 	seeds: [MainSeeder],
 };
 
