@@ -9,6 +9,10 @@ const envSchema = z.object({
 	DATABASE_USER: z.string(),
 	DATABASE_PASSWORD: z.string(),
 
+	REDIS_HOST: z.string(),
+	REDIS_PASSWORD: z.string(),
+	REDIS_PORT: z.string(),
+
 	JWT_SECRET: z.string(),
 	JWT_ACCESS_TOKEN_EXPIRATION_TIME: z.string(),
 	JWT_REFRESH_TOKEN_EXPIRATION_TIME: z.string(),
