@@ -16,9 +16,6 @@ export function checkResourceOwnership<T extends ResourceEntity>(
 		const repository = AppDataSource.getRepository(entity);
 		const whereQuery = { id: resourceId } as FindOptionsWhere<T>;
 
-		// Comment have userId field for the author
-		// Blog have authorId field for the author
-		// So I have to check both cases
 		repository
 			.findOne({
 				where: whereQuery,
