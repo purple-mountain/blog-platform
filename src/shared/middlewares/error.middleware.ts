@@ -9,6 +9,7 @@ export function errorMiddleware(
 	_next: NextFunction
 ) {
 	/* eslint-enable */
+	console.error(err);
 	if (err instanceof CustomError) {
 		return res.status(err.statusCode).json({ message: err.message });
 	}

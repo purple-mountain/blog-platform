@@ -12,19 +12,28 @@ export class BlogsRepository {
 	static async getAll(searchParams: BlogsSearchParamsDto): Promise<Blog[]> {
 		const limit = searchParams.limit || 10;
 		const page = searchParams.page || 1;
+		const { title, tags, content } = searchParams;
 
-		return await this.blogsRepository.find({
-			take: limit,
-			skip: (page - 1) * limit,
-			relations: ["author"],
-			select: {
-				author: {
-					id: true,
-					username: true,
-					email: true,
-				},
-			},
-		});
+		const queryBuilder = this.blogsRepository
+			.createQueryBuilder("blog")
+			.leftJoinAndSelect("blog.author", "author")
+			.select(["blog", "author.id", "author.username", "author.email"])
+			.take(limit)
+			.skip((page - 1) * limit);
+
+		if (title) {
+			queryBuilder.andWhere("blog.title LIKE :title", { title: `%${title}%` });
+		}
+
+		if (content) {
+			queryBuilder.andWhere("blog.content LIKE :content", { content: `%${content}%` });
+		}
+
+		if (tags && tags.length > 0) {
+			queryBuilder.andWhere("blog.tags @> :tags", { tags: tags });
+		}
+
+		return await queryBuilder.getMany();
 	}
 
 	static async getOne({ id }: { id: string }): Promise<Blog | null> {
