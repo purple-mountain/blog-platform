@@ -1,3 +1,4 @@
+import { BlogLike } from "#/modules/blog-likes/entities/blog-like.entity";
 import { User } from "#/modules/users/entities/user.entity";
 import {
 	Entity,
@@ -6,6 +7,7 @@ import {
 	PrimaryGeneratedColumn,
 	ManyToOne,
 	UpdateDateColumn,
+	OneToMany,
 } from "typeorm";
 
 @Entity({ name: "blog" })
@@ -22,8 +24,11 @@ export class Blog {
 	@Column({ type: "text" })
 	content!: string;
 
-	@Column({ array: true, type: "varchar", default: "{}" })
+	@Column({ type: "varchar", length: 255, array: true, default: "{}" })
 	tags!: string[];
+
+	@OneToMany(() => BlogLike, (blogLike) => blogLike.blog, { cascade: true })
+	likes?: BlogLike[];
 
 	@CreateDateColumn({
 		type: "timestamptz",
