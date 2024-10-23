@@ -29,7 +29,7 @@ export class BlogLikesRepository {
 		}
 
 		const likeCount = await this.blogLikesRepository.countBy({ blog: { id: blogId } });
-		await this.blogLikesCache.set(`blog:${blogId}:likes`, likeCount);
+		await this.blogLikesCache.set(`blog:${blogId}:likes`, likeCount, 60 * 60 * 24);
 
 		return likeCount;
 	}

@@ -18,8 +18,8 @@ class RedisClient {
 		}
 	}
 
-	public async set(key: string, value: string | number) {
-		return this.client.set(key, value);
+	public async set(key: string, value: string | number, expirationInSeconds: number) {
+		return this.client.set(key, value, "EX", expirationInSeconds);
 	}
 
 	public async get(key: string) {
