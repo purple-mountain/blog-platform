@@ -4,6 +4,8 @@ import { UsersController } from "../users.controller";
 import { UsersService } from "../users.service";
 import { UserRole } from "#/shared/constants/user-role.constant";
 import { User } from "../entities/user.entity";
+import { UpdateUserProfileRequestBodyDto } from "../dto/request/update-user-profile-request-body.dto";
+import { UpdateUserPasswordRequestBodyDto } from "../dto/request/update-user-password-request-body.dto";
 
 const app = express();
 
@@ -51,9 +53,71 @@ describe("UsersController", () => {
 		jest.clearAllMocks();
 	});
 
+	describe("GET /users/profile", () => {
+		it("should return user profile", async () => {
+			(UsersService.getProfile as jest.Mock).mockResolvedValue(mockUser);
+
+			const response = await request(app).get("/users/profile");
+
+			expect(response.status).toBe(200);
+			expect(response.body.data).toEqual({
+				...mockUser,
+				createdAt: mockUser.createdAt.toISOString(),
+			});
+			expect(response.body.message).toBe("User profile retrieved successfully");
+		});
+	});
+
+	describe("PUT /users/profile", () => {
+		const updateData: UpdateUserProfileRequestBodyDto = {
+			email: mockUser.email,
+			username: mockUser.username,
+		};
+
+		it("should update user profile", async () => {
+			const updateProfileSpy = jest
+				.spyOn(UsersService, "updateProfile")
+				.mockResolvedValue(mockUser);
+
+			const response = await request(app).put("/users/profile").send(updateData);
+
+			expect(response.status).toBe(200);
+			expect(response.body.data).toEqual({
+				...mockUser,
+				createdAt: mockUser.createdAt.toISOString(),
+			});
+
+			expect(updateProfileSpy).toHaveBeenCalledTimes(1);
+			expect(updateProfileSpy).toHaveBeenCalledWith(updateData, "1");
+		});
+	});
+
+	describe("PUT /users/profile/password", () => {
+		const updatePasswordData: UpdateUserPasswordRequestBodyDto = {
+			currentPassword: "123123123",
+			newPassword: "newpassword",
+		};
+
+		it("should update user password", async () => {
+			const updatePasswordSpy = jest
+				.spyOn(UsersService, "updatePassword")
+				.mockResolvedValue(undefined);
+
+			const response = await request(app)
+				.put("/users/profile/password")
+				.send(updatePasswordData);
+
+			expect(response.status).toBe(200);
+			expect(response.body.message).toBe("User password updated successfully");
+
+			expect(updatePasswordSpy).toHaveBeenCalledTimes(1);
+			expect(updatePasswordSpy).toHaveBeenCalledWith(updatePasswordData, "1");
+		});
+	});
+
 	describe("PUT /users/:id/role", () => {
 		it("should update user role", async () => {
-			(UsersService.updateUserRole as jest.Mock).mockResolvedValueOnce(mockUser);
+			(UsersService.updateUserRole as jest.Mock).mockResolvedValue(mockUser);
 
 			const response = await request(app)
 				.put("/users/" + 1 + "/role")
