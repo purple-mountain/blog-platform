@@ -72,9 +72,6 @@ describe("BlogsController", () => {
 
 			expect(response.status).toBe(200);
 
-			// when i get data from response, it converts it into json,
-			// json converts javascript date object to string
-			// so i am manually converting it here to check
 			expect(response.body).toEqual({
 				data: mockBlogs.map((mockBlog) => ({
 					...mockBlog,
@@ -150,7 +147,7 @@ describe("BlogsController", () => {
 
 	describe("DELETE /blogs/:id", () => {
 		it("should delete a blog", async () => {
-			(BlogsService.deleteBlog as jest.Mock).mockResolvedValue(0);
+			(BlogsService.deleteBlog as jest.Mock).mockResolvedValue(undefined);
 
 			const response = await request(app).delete("/blogs/" + 1);
 
