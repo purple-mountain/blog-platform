@@ -57,10 +57,16 @@ export class BlogLikesRepository {
 			blog: { id: blogId },
 		});
 
-		const blogLikesCacheExists = await this.blogLikesCache.exists(`blog:${blogId}:likes`);
+		const blogLikeExists = deleteResult.affected === 1;
 
-		if (blogLikesCacheExists) {
-			await this.blogLikesCache.decr(`blog:${blogId}:likes`);
+		if (blogLikeExists) {
+			const blogLikesCacheExists = await this.blogLikesCache.exists(
+				`blog:${blogId}:likes`
+			);
+
+			if (blogLikesCacheExists) {
+				await this.blogLikesCache.decr(`blog:${blogId}:likes`);
+			}
 		}
 
 		return deleteResult;
