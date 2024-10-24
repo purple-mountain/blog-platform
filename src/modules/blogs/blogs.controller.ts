@@ -20,6 +20,7 @@ export const BlogsController = Router();
 BlogsController.get(
 	"/",
 	validateSearchParams(blogsSearchParamsDtoSchema),
+
 	async (req: Request, res: Response) => {
 		const searchParams = req.query as unknown as BlogsSearchParamsDto;
 		const blogs = await BlogsService.getBlogs(searchParams);
@@ -28,16 +29,22 @@ BlogsController.get(
 	}
 );
 
-BlogsController.get("/:id", validatePathParameter("id", uuidSchema), async (req, res) => {
-	const blog = await BlogsService.getBlog(req.params["id"] || "");
+BlogsController.get(
+	"/:id",
+	validatePathParameter("id", uuidSchema),
 
-	return res.status(200).json({ data: blog, message: "Blog retrieved successfully" });
-});
+	async (req, res) => {
+		const blog = await BlogsService.getBlog(req.params["id"] || "");
+
+		return res.status(200).json({ data: blog, message: "Blog retrieved successfully" });
+	}
+);
 
 BlogsController.post(
 	"/",
 	auth,
 	validateRequestBody(createBlogRequestBodyDtoSchema),
+
 	async (req: Request, res: Response) => {
 		const newBlog = await BlogsService.createBlog(req.body, req.user.id);
 
@@ -51,6 +58,7 @@ BlogsController.put(
 	validatePathParameter("id", uuidSchema),
 	validateRequestBody(updateBlogRequestBodyDtoSchema),
 	checkResourceOwnership(Blog, { allowAdmin: false }),
+
 	async (req: Request, res: Response) => {
 		const updatedBlog = await BlogsService.updateBlog(req.body, req.params["id"] || "");
 
@@ -65,6 +73,7 @@ BlogsController.delete(
 	auth,
 	validatePathParameter("id", uuidSchema),
 	checkResourceOwnership(Blog, { allowAdmin: true }),
+
 	async (req: Request, res: Response) => {
 		await BlogsService.deleteBlog(req.params["id"] || "");
 

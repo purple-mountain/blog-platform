@@ -21,6 +21,7 @@ CommentsController.get(
 	"/blogs/:id/comments",
 	validatePathParameter("id", uuidSchema),
 	validateSearchParams(commentsSearchParamsDtoSchema),
+
 	async (req, res) => {
 		const searchParams = req.query as unknown as CommentsSearchParamsDto;
 		const blog = await CommentsService.getBlogComments(
@@ -39,6 +40,7 @@ CommentsController.post(
 	auth,
 	validatePathParameter("id", uuidSchema),
 	validateRequestBody(createCommentRequestBodyDtoSchema),
+
 	async (req, res) => {
 		const newComment = await CommentsService.createBlogComment(
 			req.body,
@@ -58,6 +60,7 @@ CommentsController.put(
 	validatePathParameter("id", uuidSchema),
 	validateRequestBody(updateCommentRequestBodyDtoSchema),
 	checkResourceOwnership(Comment, { allowAdmin: false }),
+
 	async (req: Request, res: Response) => {
 		const updatedComment = await CommentsService.updateComment(
 			req.body,
@@ -75,6 +78,7 @@ CommentsController.delete(
 	auth,
 	validatePathParameter("id", uuidSchema),
 	checkResourceOwnership(Comment, { allowAdmin: true }),
+
 	async (req: Request, res: Response) => {
 		await CommentsService.deleteComment(req.params["id"] || "");
 

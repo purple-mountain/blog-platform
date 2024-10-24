@@ -11,6 +11,7 @@ export const AuthController = Router();
 AuthController.post(
 	"/login",
 	validateRequestBody(loginRequestBodyDtoSchema),
+
 	async (req, res) => {
 		const { user, accessToken, refreshToken } = await AuthService.login(req.body);
 
@@ -24,6 +25,7 @@ AuthController.post(
 AuthController.post(
 	"/sign-up",
 	validateRequestBody(signUpRequestBodyDtoSchema),
+
 	async (req, res) => {
 		const { newUser, accessToken, refreshToken } = await AuthService.signUp(req.body);
 
