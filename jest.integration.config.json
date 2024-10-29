@@ -1,0 +1,15 @@
+{
+	"displayName": "integration",
+	"preset": "ts-jest",
+	"testEnvironment": "node",
+	"moduleFileExtensions": ["ts", "js"],
+	"testMatch": ["<rootDir>/test/**/*.int.spec.ts"],
+	"moduleNameMapper": {
+		"^#/(.*)$": "<rootDir>/src/$1"
+	},
+	"globals": {
+		"ts-jest": {
+			"tsconfig": "tsconfig.json"
+		}
+	}
+}

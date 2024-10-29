@@ -18,6 +18,9 @@
 		"format": "prettier --write .",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix ",
+		"test:int": "jest --config ./jest.config.json --selectProjects integration",
+		"test:unit": "jest --config ./jest.config.json --selectProjects unit",
+		"test:e2e": "jest --config ./jest.config.json --selectProjects end-to-end",
 		"test": "jest --config ./jest.config.json",
 		"prepare": "husky install"
 	},
@@ -55,6 +58,8 @@
 		"@faker-js/faker": "^8.4.1",
 		"@swc/cli": "^0.4.1-nightly.20240914",
 		"@swc/core": "^1.7.26",
+		"@testcontainers/postgresql": "^10.13.2",
+		"@testcontainers/redis": "^10.13.2",
 		"@types/bcrypt": "^5.0.2",
 		"@types/cookie-parser": "^1.4.7",
 		"@types/cors": "^2.8.17",

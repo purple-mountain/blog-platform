@@ -1,14 +1,7 @@
 {
-	"preset": "ts-jest",
-	"testEnvironment": "node",
-	"moduleFileExtensions": ["ts", "js"],
-	"testMatch": ["**/tests/**/*.spec.ts"],
-	"moduleNameMapper": {
-		"^#/(.*)$": "<rootDir>/src/$1"
-	},
-	"globals": {
-		"ts-jest": {
-			"tsconfig": "tsconfig.json"
-		}
-	}
+	"projects": [
+		"<rootDir>/jest.unit.config.json",
+		"<rootDir>/jest.integration.config.json",
+		"<rootDir>/jest.e2e.config.json"
+	]
 }
