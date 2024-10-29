@@ -1,13 +1,14 @@
-import { AppDataSource } from "#/database/database";
 import { DeleteResult, Repository } from "typeorm";
 import { Blog } from "./entities/blog.entity";
 import { CreateBlogRequestBodyDto } from "./dto/request/create-blog-request-body.dto";
 import { UpdateBlogRequestBodyDto } from "./dto/request/update-blog-request-body.dto";
 import { BlogsSearchParamsDto } from "./dto/request/blog-search-params.dto";
-import { UsersRepository } from "../users/users.repository";
+import { db } from "#/database/database";
 
 export class BlogsRepository {
-	private static blogsRepository: Repository<Blog> = AppDataSource.getRepository(Blog);
+	private static blogsRepository: Repository<Blog> = db
+		.getDataSource()
+		.getRepository(Blog);
 
 	static async getAll(searchParams: BlogsSearchParamsDto): Promise<Blog[]> {
 		const limit = searchParams.limit || 10;
@@ -54,37 +55,24 @@ export class BlogsRepository {
 		data: CreateBlogRequestBodyDto,
 		authorId: string
 	): Promise<Blog> {
-		const newBlog = this.blogsRepository.create({ ...data, author: { id: authorId } });
+		const blogToSave = this.blogsRepository.create({ ...data, author: { id: authorId } });
 
-		await this.blogsRepository.save(newBlog);
+		const createdBlog = await this.blogsRepository.save(blogToSave);
 
-		const author = await UsersRepository.getOneById({ id: newBlog.author.id });
+		const fetchedBlog = await this.getOne({ id: createdBlog.id });
 
-		if (!author) {
+		if (!fetchedBlog) {
 			throw new Error("Database error");
 		}
 
-		return {
-			...newBlog,
-			author: { id: author.id, email: author.email, username: author.username },
-		};
+		return fetchedBlog;
 	}
 
 	static async updateOne(
 		data: UpdateBlogRequestBodyDto,
 		id: string
 	): Promise<Blog | null> {
-		const blog = await this.blogsRepository.findOne({
-			where: { id },
-			relations: ["author"],
-			select: {
-				author: {
-					id: true,
-					username: true,
-					email: true,
-				},
-			},
-		});
+		const blog = await this.getOne({ id });
 
 		if (!blog) {
 			return null;
@@ -97,5 +85,9 @@ export class BlogsRepository {
 
 	static async deleteOne({ id }: { id: string }): Promise<DeleteResult> {
 		return await this.blogsRepository.delete(id);
+	}
+
+	static setRepository(repository: Repository<Blog>) {
+		this.blogsRepository = repository;
 	}
 }

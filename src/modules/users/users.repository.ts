@@ -1,10 +1,10 @@
-import { AppDataSource } from "#/database/database";
 import { SignUpRequestBodyDto } from "../auth/dto/request/sign-up-request-body.dto";
 import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
+import { db } from "#/database/database";
 
 export class UsersRepository {
-	private static repository: Repository<User> = AppDataSource.getRepository(User);
+	private static repository: Repository<User> = db.getDataSource().getRepository(User);
 
 	static async getOneByEmail({ email }: { email: string }): Promise<User | null> {
 		return await this.repository.findOne({ where: { email } });
@@ -30,5 +30,9 @@ export class UsersRepository {
 		const updatedUser = await this.repository.save({ ...user, ...data });
 
 		return updatedUser;
+	}
+
+	static setRepository(repository: Repository<User>) {
+		this.repository = repository;
 	}
 }

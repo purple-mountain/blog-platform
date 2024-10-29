@@ -1,8 +1,8 @@
 import { redisOptions } from "#/config/redis.config";
-import { Redis } from "ioredis";
+import { Redis, RedisOptions } from "ioredis";
 
-class RedisClient {
-	public readonly client: Redis;
+export class RedisClient {
+	private client: Redis;
 
 	constructor() {
 		this.client = new Redis(redisOptions);
@@ -16,6 +16,18 @@ class RedisClient {
 		} catch (error) {
 			console.error("Redis connection failure. ", error);
 		}
+	}
+
+	public async destroy() {
+		await this.client.quit();
+	}
+
+	public setClient(options: RedisOptions) {
+		this.client = new Redis(options);
+	}
+
+	public getClient() {
+		return this.client;
 	}
 
 	public async set(key: string, value: string | number, expirationInSeconds: number) {
