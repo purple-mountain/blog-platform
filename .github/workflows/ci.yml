@@ -9,6 +9,7 @@ on:
     types: [opened, synchronize]
 
 env:
+  NODE_ENV: ${{ secrets.NODE_ENV }}
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
   DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
   DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
@@ -25,13 +26,21 @@ env:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    env:
+      TESTCONTAINER_DOCKER_NETWORK: integration-tests-network
+      DOCKER_BUILDKIT: 1
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22.x"
-      - run: npm install
+      - run: npm ci
       - run: npm run build
+      - run: docker network create ${{ env.TESTCONTAINER_DOCKER_NETWORK }}
       - run: npm run test
       - run: npm run lint

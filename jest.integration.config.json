@@ -11,5 +11,6 @@
 		"ts-jest": {
 			"tsconfig": "tsconfig.json"
 		}
-	}
+	},
+	"timeout": 90000
 }
