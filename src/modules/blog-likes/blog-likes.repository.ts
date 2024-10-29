@@ -1,12 +1,14 @@
-import { AppDataSource } from "#/database/database";
 import { DeleteResult, Repository } from "typeorm";
 import { BlogLike } from "./entities/blog-like.entity";
 import { redisClient } from "#/redis/redis-client";
+import { db } from "#/database/database";
+import { RedisClient } from "#/redis/redis-client";
 
 export class BlogLikesRepository {
-	private static blogLikesRepository: Repository<BlogLike> =
-		AppDataSource.getRepository(BlogLike);
-	private static blogLikesCache = redisClient;
+	private static blogLikesRepository: Repository<BlogLike> = db
+		.getDataSource()
+		.getRepository(BlogLike);
+	private static blogLikesCache: RedisClient = redisClient;
 
 	static async getOne(blogId: string, userId: string): Promise<BlogLike | null> {
 		return await this.blogLikesRepository.findOne({
@@ -70,5 +72,13 @@ export class BlogLikesRepository {
 		}
 
 		return deleteResult;
+	}
+
+	static setRepository(repository: Repository<BlogLike>) {
+		this.blogLikesRepository = repository;
+	}
+
+	static setCache(cache: RedisClient) {
+		this.blogLikesCache = cache;
 	}
 }
