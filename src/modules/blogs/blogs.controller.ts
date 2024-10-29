@@ -48,7 +48,7 @@ BlogsController.post(
 	async (req: Request, res: Response) => {
 		const newBlog = await BlogsService.createBlog(req.body, req.user.id);
 
-		return res.status(201).json({ data: newBlog, message: "Blog created successfully" });
+		return res.status(200).json({ data: newBlog, message: "Blog created successfully" });
 	}
 );
 

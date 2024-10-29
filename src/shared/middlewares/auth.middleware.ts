@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { UnauthorizedError } from "../errors/unauthorized.error";
 import { UsersRepository } from "#/modules/users/users.repository";
-import { verifyToken } from "../utils/verifyToken";
-import { generateJwtToken } from "../utils/generateToken";
-import { sendCookies } from "../utils/sendCookies";
+import { verifyToken } from "../utils/verify-token";
+import { generateJwtToken } from "../utils/generate-token";
+import { sendCookies } from "../utils/send-cookies";
 import { AuthTokenPayload } from "../types/jwt-payload.types";
 import { envConfig } from "#/config/env.config";
 

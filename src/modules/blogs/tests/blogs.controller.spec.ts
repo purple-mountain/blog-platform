@@ -109,7 +109,7 @@ describe("BlogsController", () => {
 				.post("/blogs")
 				.send({ title: "Blog 1", content: "Content 1", tags: ["tag1"] });
 
-			expect(response.status).toBe(201);
+			expect(response.status).toBe(200);
 			expect(response.body).toEqual({
 				data: {
 					...mockBlog,

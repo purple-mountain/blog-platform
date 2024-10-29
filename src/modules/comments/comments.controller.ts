@@ -69,7 +69,7 @@ CommentsController.put(
 
 		return res
 			.status(200)
-			.json({ data: updatedComment, message: "Comment updated sucessfully" });
+			.json({ data: updatedComment, message: "Comment updated successfully" });
 	}
 );
 
