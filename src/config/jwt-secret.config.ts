@@ -1,11 +1,7 @@
+import { envConfig } from "./env.config";
+
 function getJwtSecret(): string {
-	const secret = process.env["JWT_SECRET"];
-
-	if (!secret) {
-		throw new Error("JWT_SECRET environment variable is not defined");
-	}
-
-	return secret;
+	return envConfig["JWT_SECRET"];
 }
 
 export const jwtSecret = getJwtSecret();

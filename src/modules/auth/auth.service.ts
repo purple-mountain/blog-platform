@@ -4,7 +4,7 @@ import { SignUpRequestBodyDto } from "./dto/request/sign-up-request-body.dto";
 import { UsersRepository } from "../users/users.repository";
 import { BadRequestError } from "#/shared/errors/bad-request.error";
 import { UnauthorizedError } from "#/shared/errors/unauthorized.error";
-import { generateJwtToken } from "#/shared/utils/generateToken";
+import { generateJwtToken } from "#/shared/utils/generate-token";
 import { User } from "../users/entities/user.entity";
 import { envConfig } from "#/config/env.config";
 

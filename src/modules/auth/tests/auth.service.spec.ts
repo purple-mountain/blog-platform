@@ -2,13 +2,13 @@ import { AuthService } from "../auth.service";
 import { UsersRepository } from "#/modules/users/users.repository";
 import { UnauthorizedError } from "#/shared/errors/unauthorized.error";
 import bcrypt from "bcrypt";
-import { generateJwtToken } from "#/shared/utils/generateToken";
+import { generateJwtToken } from "#/shared/utils/generate-token";
 import { BadRequestError } from "#/shared/errors/bad-request.error";
 import { User } from "#/modules/users/entities/user.entity";
 import { UserRole } from "#/shared/constants/user-role.constant";
 import { envConfig } from "#/config/env.config";
 
-jest.mock("#/shared/utils/generateToken");
+jest.mock("#/shared/utils/generate-token");
 jest.mock("bcrypt");
 
 const mockUser: User | null = {

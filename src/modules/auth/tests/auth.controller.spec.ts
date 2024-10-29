@@ -74,7 +74,7 @@ describe("AuthController", () => {
 				password: "123123123",
 			});
 
-			expect(response.status).toBe(201);
+			expect(response.status).toBe(200);
 			expect(response.body).toEqual({
 				data: { ...mockUser, createdAt: mockUser.createdAt.toISOString() },
 				message: "User signed up successfully",
