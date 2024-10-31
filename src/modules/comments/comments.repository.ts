@@ -1,13 +1,31 @@
 import { DeleteResult, Repository } from "typeorm";
 import { Comment } from "./entities/comment.entity";
-import { AppDataSource } from "#/database/database";
 import { UpdateCommentRequestBodyDto } from "./dto/request/update-comment-request-body.dto";
 import { BlogsSearchParamsDto } from "../blogs/dto/request/blog-search-params.dto";
 import { CreateCommentRequestBodyDto } from "./dto/request/create-comment-request-body.dto";
+import { db } from "#/database/database";
 
 export class CommentsRepository {
-	private static commentsRepository: Repository<Comment> =
-		AppDataSource.getRepository(Comment);
+	private static commentsRepository: Repository<Comment> = db
+		.getDataSource()
+		.getRepository(Comment);
+
+	static async getOne({ id }: { id: string }): Promise<Comment | null> {
+		return await this.commentsRepository.findOne({
+			where: { id },
+			relations: ["user", "blog"],
+			select: {
+				user: {
+					id: true,
+					username: true,
+					email: true,
+				},
+				blog: {
+					id: true,
+				},
+			},
+		});
+	}
 
 	static async getAllByBlogId(
 		searchParams: BlogsSearchParamsDto,
@@ -30,26 +48,16 @@ export class CommentsRepository {
 	}
 
 	static async updateOne(data: UpdateCommentRequestBodyDto, commentId: string) {
-		const comment = await this.commentsRepository.findOne({
-			where: { id: commentId },
-			relations: ["user", "blog"],
-			select: {
-				user: {
-					id: true,
-					username: true,
-					email: true,
-				},
-				blog: {
-					id: true,
-				},
-			},
-		});
+		const commentToUpdate = await this.getOne({ id: commentId });
 
-		if (!comment) {
+		if (!commentToUpdate) {
 			return null;
 		}
 
-		const updatedComment = await this.commentsRepository.save({ ...comment, ...data });
+		const updatedComment = await this.commentsRepository.save({
+			...commentToUpdate,
+			...data,
+		});
 
 		return updatedComment;
 	}
@@ -63,14 +71,24 @@ export class CommentsRepository {
 		authorId: string,
 		blogId: string
 	): Promise<Comment> {
-		const newComment = this.commentsRepository.create({
+		const commentToSave = this.commentsRepository.create({
 			...data,
 			user: { id: authorId },
 			blog: { id: blogId },
 		});
 
-		await this.commentsRepository.save(newComment);
+		const createdComment = await this.commentsRepository.save(commentToSave);
 
-		return newComment;
+		const fetchedComment = await this.getOne({ id: createdComment.id });
+
+		if (!fetchedComment) {
+			throw new Error("Database error");
+		}
+
+		return fetchedComment;
+	}
+
+	static setRepository(repository: Repository<Comment>) {
+		this.commentsRepository = repository;
 	}
 }

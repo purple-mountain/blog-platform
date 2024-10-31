@@ -1,0 +1,15 @@
+{
+	"displayName": "end-to-end",
+	"preset": "ts-jest",
+	"testEnvironment": "node",
+	"moduleFileExtensions": ["ts", "js"],
+	"testMatch": ["<rootDir>/test/**/*.e2e.spec.ts"],
+	"moduleNameMapper": {
+		"^#/(.*)$": "<rootDir>/src/$1"
+	},
+	"globals": {
+		"ts-jest": {
+			"tsconfig": "tsconfig.json"
+		}
+	}
+}

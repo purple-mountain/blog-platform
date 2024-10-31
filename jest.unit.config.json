@@ -1,0 +1,15 @@
+{
+	"displayName": "unit",
+	"preset": "ts-jest",
+	"testEnvironment": "node",
+	"moduleFileExtensions": ["ts", "js"],
+	"testMatch": ["**/tests/**/*.spec.ts"],
+	"moduleNameMapper": {
+		"^#/(.*)$": "<rootDir>/src/$1"
+	},
+	"globals": {
+		"ts-jest": {
+			"tsconfig": "tsconfig.json"
+		}
+	}
+}

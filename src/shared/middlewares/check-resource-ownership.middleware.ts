@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UnauthorizedError } from "../errors/unauthorized.error";
 import { EntityTarget, FindOptionsWhere } from "typeorm";
-import { AppDataSource } from "#/database/database";
+import { db } from "#/database/database";
 
 type ResourceEntity =
 	| { id: string; author: { id: string }; user?: never }
@@ -13,7 +13,7 @@ export function checkResourceOwnership<T extends ResourceEntity>(
 ) {
 	return (req: Request, _res: Response, next: NextFunction) => {
 		const resourceId = req.params["id"] || "";
-		const repository = AppDataSource.getRepository(entity);
+		const repository = db.getDataSource().getRepository(entity);
 		const whereQuery = { id: resourceId } as FindOptionsWhere<T>;
 
 		repository
@@ -44,7 +44,6 @@ export function checkResourceOwnership<T extends ResourceEntity>(
 				}
 			})
 			.catch((error) => {
-				console.error(error);
 				next(error);
 			});
 	};
